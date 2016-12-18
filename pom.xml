@@ -49,4 +49,17 @@
             <version>9.4.0.v20161208</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.rimerosolutions.maven.plugins</groupId>
+                <artifactId>wrapper-maven-plugin</artifactId>
+                <version>0.0.4</version>
+                <configuration>
+                    <mavenVersion>3.3.1</mavenVersion>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
