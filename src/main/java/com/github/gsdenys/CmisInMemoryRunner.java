@@ -90,6 +90,8 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
     private String getWar() {
         String regex = "(.*:)([a-zA-Z0-9/.-]+" + LIB_NAME_WAR + "[a-zA-Z0-9/.-]*.war)(.*)";
 
+        System.out.println(System.getProperty("java.class.path"));
+
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(System.getProperty("java.class.path"));
 
