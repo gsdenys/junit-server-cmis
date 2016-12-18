@@ -31,7 +31,8 @@ import java.util.regex.Pattern;
  * @since 0.0.1
  */
 public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
-    private static final String LIB_NAME_WAR = "chemistry-opencmis-server-inmemory";
+    private final String CMIS_LIB_NAME_WAR = "chemistry-opencmis-server-inmemory";
+    private final String JETTY_RELATIVE_PATH = "eclipse/jetty/jetty-xml";
     private static boolean initialized = false;
 
     /**
@@ -47,7 +48,7 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
             if (!initialized) {
                 System.out.println("Let's run cmis in memory server with jetty ...");
 
-                String filePath = this.getWar();
+                String filePath = this.getWarFromJavaClassPath();
 
                 try {
                     initialized = this.startJettyServer(filePath, 8080);
@@ -70,7 +71,7 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
         Server server = new Server(port);
 
         WebAppContext webapp = new WebAppContext();
-        webapp.setContextPath("/");
+        webapp.setContextPath("/cmis/");
         webapp.setWar(cmisWar);
 
         server.setHandler(webapp);
@@ -80,6 +81,57 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
         return true;
     }
 
+    /**
+     * Build a URL based on a url base.
+     *
+     * @param base
+     *          the url base
+     * @return StringBuilder
+     */
+    private StringBuilder buildLibURL(final String base) {
+        final String cmisRelativePath = "apache/chemistry/opencmis/";
+        final String libVersion = "1.0.0";
+
+        StringBuilder builder = new StringBuilder();
+        // e.g. /home/username/.m2/repository/org/
+        builder.append(base);
+
+        // e.g. apache/chemistry/opencmis/chemistry-opencmis-server-inmemory/1.0.0/
+        builder.append(cmisRelativePath);
+        builder.append(CMIS_LIB_NAME_WAR);
+        builder.append("/");
+        builder.append(libVersion);
+        builder.append("/");
+
+        // e.g. chemistry-opencmis-server-inmemory-1.0.0.war
+        builder.append(CMIS_LIB_NAME_WAR);
+        builder.append("-");
+        builder.append(libVersion);
+        builder.append(".war");
+
+        return builder;
+    }
+
+
+    /**
+     * Get the cmis.war from a relative path based on eclipse-jetty.
+     *
+     * This method is just used if you use maven, that instead gradle, cannot put the war in classpath
+     *
+     * @return String
+     */
+    private String getWarFromRelativePath() {
+        final String regex = "(.*:)([a-zA-Z0-9/.-]+)(" + JETTY_RELATIVE_PATH + ")(.*)";
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(System.getProperty("java.class.path"));
+
+        if (!matcher.find()) {
+            return null;
+        }
+
+        return this.buildLibURL(matcher.group(2)).toString();
+    }
 
     /**
      * Discovery the full path to the chemistry-opencmis-server-inmemory war file
@@ -87,14 +139,12 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
      * @return String
      * the cmis war file path
      */
-    private String getWar() {
-        String regex = "(.*:)([a-zA-Z0-9/.-]+" + LIB_NAME_WAR + "[a-zA-Z0-9/.-]*.war)(.*)";
-
-        System.out.println(System.getProperty("java.class.path"));
+    private String getWarFromJavaClassPath() {
+        String regex = "(.*:)([a-zA-Z0-9/.-]+" + CMIS_LIB_NAME_WAR + "[a-zA-Z0-9/.-]*.war)(.*)";
 
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(System.getProperty("java.class.path"));
 
-        return matcher.find() ? matcher.group(2) : null;
+        return matcher.find() ? matcher.group(2) : this.getWarFromRelativePath();
     }
 }

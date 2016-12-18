@@ -43,7 +43,7 @@ public class CmisInMemoryRunnerTest {
 
     @Test
     public void name1() throws Exception {
-        URL url = new URL("http://localhost:8080/atom");
+        URL url = new URL("http://localhost:8080/cmis/atom");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Accept", "application/json");
