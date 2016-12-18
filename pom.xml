@@ -1,0 +1,54 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                          http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.github.gsdenys</groupId>
+    <artifactId>junit-server-cmis</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+
+    <name>Junit Server CMIS</name>
+    <description>A way to run test case using @RunWith(CmisInMemoryRunner.class)</description>
+    <url>http://github.com/gsdenys/junit-server-cmis</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.github.gsdenys</groupId>
+            <artifactId>cmis-war</artifactId>
+            <version>0.0.1</version>
+            <scope>system</scope>
+            <systemPath>/home/gsdenys/workspaces/cmis/junit-server-cmis/src/test/resources/cmis.war</systemPath>
+        </dependency>
+
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-server</artifactId>
+            <version>9.4.0.v20161208</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-webapp</artifactId>
+            <version>9.4.0.v20161208</version>
+        </dependency>
+    </dependencies>
+</project>
