@@ -15,6 +15,7 @@
  */
 package com.github.gsdenys;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -22,8 +23,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import static org.junit.Assert.*;
 
 /**
  * Test for the {@link CmisInMemoryRunner} class
@@ -36,31 +35,17 @@ import static org.junit.Assert.*;
 public class CmisInMemoryRunnerTest {
 
     @Test
-    public void name() throws Exception {
-
-            System.out.print("Olá mundo");
-    }
-
-    @Test
-    public void name1() throws Exception {
+    public void testConnection() throws Exception {
         URL url = new URL("http://localhost:8080/cmis/atom");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Accept", "application/json");
 
-        if (conn.getResponseCode() != 200) {
-            throw new RuntimeException("Failed : HTTP error code : "
-                    + conn.getResponseCode());
-        }
+        Assert.assertEquals("The Response code should be 200", conn.getResponseCode(), 200);
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(
-                (conn.getInputStream())));
+        BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 
-        String output;
-        System.out.println("Output from Server .... \n");
-        while ((output = br.readLine()) != null) {
-            System.out.println(output);
-        }
+        Assert.assertNotNull("The return should be null", br.readLine());
 
         conn.disconnect();
     }

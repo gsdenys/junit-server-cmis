@@ -31,9 +31,10 @@ import java.util.regex.Pattern;
  * @since 0.0.1
  */
 public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
+
+    private static boolean initialized = false;
     private final String CMIS_LIB_NAME_WAR = "chemistry-opencmis-server-inmemory";
     private final String JETTY_RELATIVE_PATH = "eclipse/jetty/jetty-xml";
-    private static boolean initialized = false;
 
     /**
      * CMIS In Memory Starter
@@ -46,8 +47,6 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
 
         synchronized (CmisInMemoryRunner.class) {
             if (!initialized) {
-                System.out.println("Let's run cmis in memory server with jetty ...");
-
                 String filePath = this.getWarFromJavaClassPath();
 
                 try {
@@ -84,8 +83,7 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
     /**
      * Build a URL based on a url base.
      *
-     * @param base
-     *          the url base
+     * @param base the url base
      * @return StringBuilder
      */
     private StringBuilder buildLibURL(final String base) {
@@ -115,7 +113,7 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
 
     /**
      * Get the cmis.war from a relative path based on eclipse-jetty.
-     *
+     * <p>
      * This method is just used if you use maven, that instead gradle, cannot put the war in classpath
      *
      * @return String

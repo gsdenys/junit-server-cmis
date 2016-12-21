@@ -32,6 +32,13 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.chemistry.opencmis</groupId>
+            <artifactId>chemistry-opencmis-client-impl</artifactId>
+            <version>1.0.0</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
@@ -53,11 +60,12 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>com.rimerosolutions.maven.plugins</groupId>
-                <artifactId>wrapper-maven-plugin</artifactId>
-                <version>0.0.4</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.0</version>
                 <configuration>
-                    <mavenVersion>3.3.1</mavenVersion>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
         </plugins>

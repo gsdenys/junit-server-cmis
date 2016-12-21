@@ -1,5 +1,5 @@
 group 'com.github.gsdenys'
-version '0.0.1-SNAPSHOT'
+version '0.0.1'
 
 apply plugin: 'java'
 
@@ -14,4 +14,6 @@ dependencies {
     compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.0.v20161208'
     compile group: 'org.eclipse.jetty', name: 'jetty-webapp', version: '9.4.0.v20161208'
     compile group: 'org.apache.chemistry.opencmis', name: 'chemistry-opencmis-server-inmemory', version: '1.0.0'
+
+    testCompile group: 'org.apache.chemistry.opencmis', name: 'chemistry-opencmis-client-impl', version: '1.0.0'
 }
