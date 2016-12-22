@@ -36,11 +36,13 @@ this will download and install gradle locally and use it to build the project. A
 To use the JUnit Runner for CMIS you need to import the required libs.
 
 __with Gradle__
+
 ```json
 testCompile group: 'com.github.gsdenys', name: 'junit-server-cmis', version: '0.0.1'
 ```
 
 __with Maven__
+
 ```xml
 <dependency>
     <groupId>com.github.gsdenys</groupId>
