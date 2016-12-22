@@ -58,6 +58,12 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
         }
     }
 
+    /*private Integer port() {
+        Class<?> javaClass = getTestClass().getJavaClass();
+
+        ServerConfig serverConfig = javaClass.getAnnotation(ServerConfig.class);
+    }*/
+
     /**
      * Start jetty server
      *

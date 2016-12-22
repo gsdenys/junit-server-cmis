@@ -1,7 +1,9 @@
 group 'com.github.gsdenys'
-version '0.0.1'
+version '0.0.2'
 
 apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'signing'
 
 sourceCompatibility = 1.8
 
@@ -13,7 +15,78 @@ dependencies {
     compile group: 'junit', name: 'junit', version: '4.11'
     compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.0.v20161208'
     compile group: 'org.eclipse.jetty', name: 'jetty-webapp', version: '9.4.0.v20161208'
-    compile group: 'org.apache.chemistry.opencmis', name: 'chemistry-opencmis-server-inmemory', version: '1.0.0'
+    compile group: 'org.apache.chemistry.opencmis', name: 'chemistry-opencmis-server-inmemory', version: '1.0.0', ext: 'war'
 
     testCompile group: 'org.apache.chemistry.opencmis', name: 'chemistry-opencmis-client-impl', version: '1.0.0'
 }
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives jar
+
+    archives javadocJar
+    archives sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'junit-server-cmis'
+                packaging 'jar'
+                // optionally artifactId can be defined here
+                description 'A simple way to start a cmis server in memory for JUnit TestCase'
+                url 'http://github.com/gsdenys/junit-server-cmis'
+
+                scm {
+                    connection 'scm:git:git@github.com:gsdenys/junit-server-cmis.git'
+                    developerConnection 'scm:git:git@github.com:gsdenys/junit-server-cmis.git'
+                    url 'git@github.com:gsdenys/junit-server-cmis.git'
+                }
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'gsdenys'
+                        name 'Denys G. Santos'
+                        email 'gsdenys@gmail.com'
+                    }
+                }
+            }
+        }
+    }
+}
+
+
+
+

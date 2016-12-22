@@ -25,3 +25,4 @@ hs_err_pid*
 
 !/gradle/wrapper/gradle-wrapper.jar
 !/maven/maven-wrapper.jar
+/gradle.properties
