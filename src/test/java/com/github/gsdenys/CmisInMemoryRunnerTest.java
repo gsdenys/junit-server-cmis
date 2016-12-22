@@ -36,7 +36,7 @@ public class CmisInMemoryRunnerTest {
 
     @Test
     public void testConnection() throws Exception {
-        URL url = new URL("http://localhost:8080/cmis/atom");
+        URL url = new URL("http://localhost:" + CmisInMemoryRunner.cmisPort + "/cmis/atom");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Accept", "application/json");

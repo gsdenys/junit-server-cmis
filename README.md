@@ -20,24 +20,7 @@ To clone project and access the project directory execute:
     
     cd junit-server-cmis
 
-To generate the project dist (__.jar__) you can choose between [Maven](http://maven.apache.org) or [graddle](https://gradle.org/). 
-
-### Maven
-
-To compile using local Maven installation you need do execute the follow command.
-
-    mvn install
-    
-In contrast of local maven you also can use the wrapper way executing the follow command:
-
-    mvnw install
- 
-this will download and install maven locally and use it to build the project. After build the __.jar__ file will stay at _<project_home>/target/lib/junit-server-cmis-\<version>.jar_
-
-
-### Gradle
-
-To compile using local Gradle installation you need do execute the follow command.
+To generate the project dist (__.jar__) you can use a [graddle](https://gradle.org/) local installation, executing the follow command:
 
     gradle build
     
@@ -77,3 +60,4 @@ public class UsageTest {
     }
 }
 ```
+Once running the Junit Test Case will starts a Jetty server with a deployed CMIS InMemory Server at __localhost__ using a random port that can be descovery using the __CmisInMemoryRunner.cmisPort__ static variable.

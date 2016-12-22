@@ -20,6 +20,8 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
 
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -32,7 +34,9 @@ import java.util.regex.Pattern;
  */
 public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
 
+    public static Integer cmisPort;
     private static boolean initialized = false;
+
     private final String CMIS_LIB_NAME_WAR = "chemistry-opencmis-server-inmemory";
     private final String JETTY_RELATIVE_PATH = "eclipse/jetty/jetty-xml";
 
@@ -50,7 +54,8 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
                 String filePath = this.getWarFromJavaClassPath();
 
                 try {
-                    initialized = this.startJettyServer(filePath, 8080);
+                    cmisPort = this.port();
+                    initialized = this.startJettyServer(filePath, cmisPort);
                 } catch (Exception e) {
                     throw new InitializationError(e);
                 }
@@ -58,11 +63,18 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
         }
     }
 
-    /*private Integer port() {
-        Class<?> javaClass = getTestClass().getJavaClass();
-
-        ServerConfig serverConfig = javaClass.getAnnotation(ServerConfig.class);
-    }*/
+    /**
+     * Define the port to the jetty server execution
+     *
+     * @return Integer the port of jetty exeecution
+     */
+    private Integer port() {
+        try (ServerSocket socket = new ServerSocket(0);) {
+            return socket.getLocalPort();
+        } catch (IOException e) {
+            return 8080;
+        }
+    }
 
     /**
      * Start jetty server
