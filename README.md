@@ -37,7 +37,7 @@ To use the JUnit Runner for CMIS you need to import the required libs.
 
 __with Gradle__
 
-```json
+```
 testCompile group: 'com.github.gsdenys', name: 'junit-server-cmis', version: '0.0.1'
 ```
 
