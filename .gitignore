@@ -21,8 +21,6 @@ hs_err_pid*
 /.gradle/
 /build/
 /.idea/
-/target/
 
 !/gradle/wrapper/gradle-wrapper.jar
-!/maven/maven-wrapper.jar
 /gradle.properties
