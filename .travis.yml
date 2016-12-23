@@ -4,7 +4,4 @@ jdk:
   - oraclejdk8
 
 script:
-  - ./gradlew build
-
-
-install: true
+  - ./gradlew assemble -x uploadArchives signing artifacts
