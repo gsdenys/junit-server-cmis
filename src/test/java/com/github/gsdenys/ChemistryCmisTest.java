@@ -41,6 +41,7 @@ public class ChemistryCmisTest {
     private Map<String, String> parameter;
     private SessionFactory factory;
 
+
     @Before
     public void setUp() throws Exception {
         StringBuilder builder = new StringBuilder();

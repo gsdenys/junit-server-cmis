@@ -19,9 +19,12 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
+import org.junit.runners.model.TestClass;
 
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.net.ServerSocket;
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -68,6 +71,13 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
      * @return Integer the port of jetty exeecution
      */
     private Integer port() {
+
+        //in case of test class was annotated with @configure
+        if(super.getTestClass().getJavaClass().isAnnotationPresent(Configure.class)) {
+            Configure configure = super.getTestClass().getJavaClass().getDeclaredAnnotation(Configure.class);
+            return configure.port();
+        }
+
         try (ServerSocket socket = new ServerSocket(0)) {
             return socket.getLocalPort();
         } catch (IOException e) {
