@@ -16,7 +16,6 @@
 package com.github.gsdenys;
 
 import org.junit.Assert;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -37,7 +36,7 @@ public class CmisInMemoryRunnerTest {
 
     @Test
     public void testConnection() throws Exception {
-        URL url = new URL("http://localhost:" + CmisInMemoryRunner.cmisPort + "/cmis/atom");
+        URL url = new URL("http://localhost:" + CmisInMemoryRunner.CMIS_PORT + "/cmis/atom");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Accept", "application/json");

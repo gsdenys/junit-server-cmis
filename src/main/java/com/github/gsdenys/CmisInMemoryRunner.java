@@ -34,11 +34,10 @@ import java.util.regex.Pattern;
  */
 public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
 
-    public static Integer cmisPort;
+    public static Integer CMIS_PORT;
     private static boolean initialized = false;
 
     private final String CMIS_LIB_NAME_WAR = "chemistry-opencmis-server-inmemory";
-    private final String JETTY_RELATIVE_PATH = "eclipse/jetty/jetty-xml";
 
     /**
      * CMIS In Memory Starter
@@ -54,8 +53,8 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
                 String filePath = this.getWarFromJavaClassPath();
 
                 try {
-                    cmisPort = this.port();
-                    initialized = this.startJettyServer(filePath, cmisPort);
+                    CMIS_PORT = this.port();
+                    initialized = this.startJettyServer(filePath, CMIS_PORT);
                 } catch (Exception e) {
                     throw new InitializationError(e);
                 }
@@ -69,8 +68,7 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
      * @return Integer the port of jetty exeecution
      */
     private Integer port() {
-
-        try (ServerSocket socket = new ServerSocket(0);) {
+        try (ServerSocket socket = new ServerSocket(0)) {
             return socket.getLocalPort();
         } catch (IOException e) {
             return 8080;
@@ -138,6 +136,7 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
      * @return String
      */
     private String getWarFromRelativePath() {
+        String JETTY_RELATIVE_PATH = "eclipse/jetty/jetty-xml";
         final String regex = "(.*:)([a-zA-Z0-9/.-]+)(" + JETTY_RELATIVE_PATH + ")(.*)";
 
         Pattern pattern = Pattern.compile(regex);

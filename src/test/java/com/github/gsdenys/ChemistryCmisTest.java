@@ -47,10 +47,8 @@ public class ChemistryCmisTest {
         builder.append("http://");
         builder.append("localhost");
         builder.append(":");
-        builder.append(CmisInMemoryRunner.cmisPort);
+        builder.append(CmisInMemoryRunner.CMIS_PORT);
         builder.append("/cmis/atom");
-
-        System.out.print(builder.toString());
 
         if (this.parameter == null) {
             this.parameter = new HashMap<>();
@@ -61,6 +59,8 @@ public class ChemistryCmisTest {
             this.parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
             this.parameter.put(SessionParameter.REPOSITORY_ID, "A1");
         }
+
+        this.factory = SessionFactoryImpl.newInstance();
     }
 
     @Test
