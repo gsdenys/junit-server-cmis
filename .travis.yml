@@ -4,7 +4,7 @@ jdk:
   - oraclejdk8
 
 script:
-  - ./gradlew assemble -x uploadArchives
+  - ./gradlew assemble -x uploadArchives signArchives
 
 
 install: true
