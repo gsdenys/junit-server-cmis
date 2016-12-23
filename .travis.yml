@@ -5,3 +5,6 @@ jdk:
 
 script:
   - ./gradlew assemble -x uploadArchives signing artifacts
+
+
+install: true
