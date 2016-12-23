@@ -69,6 +69,7 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
      * @return Integer the port of jetty exeecution
      */
     private Integer port() {
+
         try (ServerSocket socket = new ServerSocket(0);) {
             return socket.getLocalPort();
         } catch (IOException e) {
