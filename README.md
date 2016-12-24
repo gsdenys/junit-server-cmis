@@ -1,6 +1,7 @@
 # JUnit Runner for CMIS
 
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/23e85edc3bfd4323af0b671a4bb9f7b6)](https://www.codacy.com/app/gsdenys/junit-server-cmis?utm_source=github.com&utm_medium=referral&utm_content=gsdenys/junit-server-cmis&utm_campaign=badger)
 [![Build Status](https://travis-ci.org/gsdenys/junit-server-cmis.svg?branch=master)](https://travis-ci.org/gsdenys/junit-server-cmis)   [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.github.gsdenys/junit-server-cmis/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.gsdenys/junit-server-cmis)
 
 This project was developed to help starts a [CMIS](https://docs.oasis-open.org/cmis/CMIS/v1.1/CMIS-v1.1.html) InMemory Server ([described here](https://chemistry.apache.org/java/developing/repositories/dev-repositories-inmemory.html)) in a JUnit Test Case _Class_. 
