@@ -19,12 +19,9 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
-import org.junit.runners.model.TestClass;
 
 import java.io.IOException;
-import java.lang.annotation.Annotation;
 import java.net.ServerSocket;
-import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,7 +34,7 @@ import java.util.regex.Pattern;
  */
 public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
 
-    public static Integer CMIS_PORT;
+    public static Integer CMIS_PORT = 8080;
     private static boolean initialized = false;
 
     private static Server server;
@@ -54,17 +51,13 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
 
         synchronized (CmisInMemoryRunner.class) {
             Integer port = this.getPortDefinedByUser();
-            if(port != null) {
-                if (server != null && server.isRunning()) {
-                    if (!CMIS_PORT.equals(port)) {
-                        try {
-                            server.stop();
-                            initialized = false;
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            throw new InitializationError("Unable to stop server");
-                        }
-                    }
+            if (port != null && server != null && server.isRunning() && !CMIS_PORT.equals(port)) {
+                try {
+                    server.stop();
+                    initialized = false;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    throw new InitializationError("Unable to stop server");
                 }
             }
 
@@ -89,7 +82,7 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
     private Integer port() {
         Integer port = this.getPortDefinedByUser();
 
-        if(port != null) {
+        if (port != null) {
             return port;
         }
 
@@ -102,7 +95,7 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
 
     private Integer getPortDefinedByUser() {
         //in case of test class was annotated with @configure
-        if(super.getTestClass().getJavaClass().isAnnotationPresent(Configure.class)) {
+        if (super.getTestClass().getJavaClass().isAnnotationPresent(Configure.class)) {
             Configure configure = super.getTestClass().getJavaClass().getDeclaredAnnotation(Configure.class);
             return configure.port();
         }
