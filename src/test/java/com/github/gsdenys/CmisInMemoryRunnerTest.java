@@ -24,6 +24,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * Test for the {@link CmisInMemoryRunner} class
  *
@@ -32,6 +34,7 @@ import java.net.URL;
  * @since 0.0.1
  */
 @RunWith(CmisInMemoryRunner.class)
+@Configure(port = 8080)
 public class CmisInMemoryRunnerTest {
 
     @Test
@@ -41,12 +44,30 @@ public class CmisInMemoryRunnerTest {
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Accept", "application/json");
 
-        Assert.assertEquals("The Response code should be 200", conn.getResponseCode(), 200);
+        assertEquals("The Response code should be 200", conn.getResponseCode(), 200);
 
         BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 
         Assert.assertNotNull("The return should be null", br.readLine());
 
         conn.disconnect();
+    }
+
+    @Test
+    public void port() throws Exception {
+        assertEquals(
+                "The port should be 8080",
+                java.util.Optional.ofNullable(CmisInMemoryRunner.CMIS_PORT),
+                8080
+        );
+    }
+
+    @Test
+    public void getPortDefinedByUser() throws Exception {
+        assertEquals(
+                "The port should be 8080",
+                java.util.Optional.ofNullable(CmisInMemoryRunner.CMIS_PORT),
+                8080
+        );
     }
 }
