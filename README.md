@@ -22,14 +22,15 @@ To clone project and access the project directory execute:
 
 To generate the project dist (__.jar__) you can use a [gradle](https://gradle.org/) local installation. Execute the follow command:
 
-    gradle build
+    gradle build -x signArchives
     
 In contrast of local gradle you also can use the wrapper way executing the command:
 
-    gradlew build
+    ./gradlew build -x signArchives
  
 this will download and install gradle locally and use it to build the project. After build the __.jar__ file will be created at _<project_home>/build/junit-server-cmis-\<version>.jar_
 
+__Notes:__ _Before execute the gradle build command, put in your env the __USER__ and __PASSWORD__ variable initialized with any value._ 
 
 ## Usage
 
