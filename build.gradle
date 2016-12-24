@@ -4,6 +4,7 @@ version '1.1.1'
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'signing'
+apply plugin: "jacoco"
 
 sourceCompatibility = 1.8
 
@@ -19,6 +20,20 @@ dependencies {
 
     testCompile group: 'org.apache.chemistry.opencmis', name: 'chemistry-opencmis-client-impl', version: '1.0.0'
 }
+
+jacoco {
+    toolVersion = "0.7.6.201602180812"
+    reportsDir = file("$buildDir/reports/jacoco")
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        csv.enabled true
+        html.destination "${buildDir}/reports/jacoco/html"
+    }
+}
+
 
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
