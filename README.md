@@ -66,7 +66,7 @@ public class UsageTest {
 Once running the Junit Test Case will starts a Jetty server with a deployed CMIS InMemory Server at __localhost__ using a random port that can be discovery using the __CmisInMemoryRunner.CMIS_PORT__ static variable.
 
 
-Optionally, you can define the port that the server will be initiated using the annotation __@Configure__ (Version 1.1.1 or later). An example of the use of this annotation can be seen below.
+Optionally, you can define the port that the server will be initiated using the annotation __@Configure__ (Version 1.1.1 or later). An use example of this annotation can be seen below.
 
 ```java
 @RunWith(CmisInMemoryRunner.class)
