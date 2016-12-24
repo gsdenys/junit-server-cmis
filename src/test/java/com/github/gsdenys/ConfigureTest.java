@@ -39,8 +39,6 @@ public class ConfigureTest {
 
     @Test
     public void testConnection() throws Exception {
-        System.out.println(CmisInMemoryRunner.CMIS_PORT);
-
         URL url = new URL("http://localhost:9191/cmis/atom");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");

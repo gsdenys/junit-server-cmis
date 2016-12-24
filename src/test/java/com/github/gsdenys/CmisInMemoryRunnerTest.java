@@ -25,6 +25,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Test for the {@link CmisInMemoryRunner} class
@@ -55,10 +56,16 @@ public class CmisInMemoryRunnerTest {
 
     @Test
     public void port() throws Exception {
+        Integer port = CmisInMemoryRunner.CMIS_PORT;
+
+        System.out.print("\n\n\n\n\n>>>>>>\n" + port + "\n<<<<<<<\n\n\n\n");
+
+        assertNotNull("The object should not be null", port);
+
         assertEquals(
                 "The port should be 8080",
-                java.util.Optional.ofNullable(CmisInMemoryRunner.CMIS_PORT),
-                8080
+                java.util.Optional.ofNullable(port),
+                java.util.Optional.ofNullable(8080)
         );
     }
 
@@ -67,7 +74,7 @@ public class CmisInMemoryRunnerTest {
         assertEquals(
                 "The port should be 8080",
                 java.util.Optional.ofNullable(CmisInMemoryRunner.CMIS_PORT),
-                8080
+                java.util.Optional.ofNullable(8080)
         );
     }
 }
