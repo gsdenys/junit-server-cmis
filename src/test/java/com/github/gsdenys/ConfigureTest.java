@@ -33,13 +33,15 @@ import java.net.URL;
  */
 @RunWith(CmisInMemoryRunner.class)
 @Configure(
-        port = 9090
+        port = 9191
 )
 public class ConfigureTest {
 
     @Test
     public void testConnection() throws Exception {
-        URL url = new URL("http://localhost:9090/cmis/atom");
+        System.out.println(CmisInMemoryRunner.CMIS_PORT);
+
+        URL url = new URL("http://localhost:9191/cmis/atom");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Accept", "application/json");

@@ -21,6 +21,8 @@ dependencies {
     testCompile group: 'org.apache.chemistry.opencmis', name: 'chemistry-opencmis-client-impl', version: '1.0.0'
 }
 
+
+//coverage with jacoco
 jacoco {
     toolVersion = "0.7.6.201602180812"
     reportsDir = file("$buildDir/reports/jacoco")

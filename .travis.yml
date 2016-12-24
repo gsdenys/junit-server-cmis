@@ -9,7 +9,7 @@ before_install:
   - ~/jpm/bin/jpm install com.codacy:codacy-coverage-reporter:assembly
 
 script:
-  - ./gradlew -x signArchives
+  - ./gradlew test jacocoTestReport -x signArchives
 
 install: true
 

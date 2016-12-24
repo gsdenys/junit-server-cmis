@@ -40,6 +40,7 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
     public static Integer CMIS_PORT;
     private static boolean initialized = false;
 
+    private static Server server;
     private final String CMIS_LIB_NAME_WAR = "chemistry-opencmis-server-inmemory";
 
     /**
@@ -52,6 +53,21 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
         super(klass);
 
         synchronized (CmisInMemoryRunner.class) {
+            Integer port = this.getPortDefinedByUser();
+            if(port != null) {
+                if (server != null && server.isRunning()) {
+                    if (!CMIS_PORT.equals(port)) {
+                        try {
+                            server.stop();
+                            initialized = false;
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            throw new InitializationError("Unable to stop server");
+                        }
+                    }
+                }
+            }
+
             if (!initialized) {
                 String filePath = this.getWarFromJavaClassPath();
 
@@ -71,11 +87,10 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
      * @return Integer the port of jetty exeecution
      */
     private Integer port() {
+        Integer port = this.getPortDefinedByUser();
 
-        //in case of test class was annotated with @configure
-        if(super.getTestClass().getJavaClass().isAnnotationPresent(Configure.class)) {
-            Configure configure = super.getTestClass().getJavaClass().getDeclaredAnnotation(Configure.class);
-            return configure.port();
+        if(port != null) {
+            return port;
         }
 
         try (ServerSocket socket = new ServerSocket(0)) {
@@ -83,6 +98,16 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
         } catch (IOException e) {
             return 8080;
         }
+    }
+
+    private Integer getPortDefinedByUser() {
+        //in case of test class was annotated with @configure
+        if(super.getTestClass().getJavaClass().isAnnotationPresent(Configure.class)) {
+            Configure configure = super.getTestClass().getJavaClass().getDeclaredAnnotation(Configure.class);
+            return configure.port();
+        }
+
+        return null;
     }
 
     /**
@@ -94,15 +119,15 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
      * @throws Exception any exception that can occur
      */
     private boolean startJettyServer(String cmisWar, Integer port) throws Exception {
-        Server server = new Server(port);
+        this.server = new Server(port);
 
         WebAppContext webapp = new WebAppContext();
         webapp.setContextPath("/cmis/");
         webapp.setWar(cmisWar);
 
-        server.setHandler(webapp);
+        this.server.setHandler(webapp);
 
-        server.start();
+        this.server.start();
 
         return true;
     }
