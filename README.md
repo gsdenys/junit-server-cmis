@@ -39,7 +39,7 @@ To use the JUnit Runner for CMIS you need to import the required libs.
 __with Gradle__
 
 ```
-testCompile group: 'com.github.gsdenys', name: 'junit-server-cmis', version: '1.1.0'
+testCompile group: 'com.github.gsdenys', name: 'junit-server-cmis', version: '1.1.2'
 ```
 
 __with Maven__
@@ -48,7 +48,7 @@ __with Maven__
 <dependency>
     <groupId>com.github.gsdenys</groupId>
     <artifactId>junit-server-cmis</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.2</version>
 </dependency>
 ```
 
