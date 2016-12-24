@@ -35,7 +35,7 @@ import java.net.URL;
 @Configure(
         port = 9090
 )
-public class CmisInMemoryRunnerConfigureTest {
+public class ConfigureTest {
 
     @Test
     public void testConnection() throws Exception {
