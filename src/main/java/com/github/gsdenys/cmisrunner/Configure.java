@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.gsdenys;
+package com.github.gsdenys.cmisrunner;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -31,10 +31,19 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface Configure {
+
     /**
      * the port where the cmis server will run. By default 8080
      *
      * @return int  the port where the cmis server need to be started
      */
     int port() default 8080;
+
+
+    /**
+     * The document type descriptor file.
+     *
+     * @return the descriptor file
+     */
+    String[] descritor() default {};
 }

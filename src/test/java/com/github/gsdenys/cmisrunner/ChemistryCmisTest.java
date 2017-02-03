@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.gsdenys;
+package com.github.gsdenys.cmisrunner;
 
+import com.github.gsdenys.cmisrunner.CmisInMemoryRunner;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
@@ -48,7 +49,7 @@ public class ChemistryCmisTest {
         builder.append("http://");
         builder.append("localhost");
         builder.append(":");
-        builder.append(CmisInMemoryRunner.CMIS_PORT);
+        builder.append(CmisInMemoryRunner.getCmisPort());
         builder.append("/cmis/atom");
 
         if (this.parameter == null) {

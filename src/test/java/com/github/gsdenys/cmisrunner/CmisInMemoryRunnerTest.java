@@ -13,8 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.gsdenys;
+package com.github.gsdenys.cmisrunner;
 
+import com.github.gsdenys.cmisrunner.CmisInMemoryRunner;
+import com.github.gsdenys.cmisrunner.Configure;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,7 +42,7 @@ public class CmisInMemoryRunnerTest {
 
     @Test
     public void testConnection() throws Exception {
-        URL url = new URL("http://localhost:" + CmisInMemoryRunner.CMIS_PORT + "/cmis/atom");
+        URL url = new URL("http://localhost:" + CmisInMemoryRunner.getCmisPort() + "/cmis/atom");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Accept", "application/json");
@@ -56,9 +58,7 @@ public class CmisInMemoryRunnerTest {
 
     @Test
     public void port() throws Exception {
-        Integer port = CmisInMemoryRunner.CMIS_PORT;
-
-        System.out.print("\n\n\n\n\n>>>>>>\n" + port + "\n<<<<<<<\n\n\n\n");
+        Integer port = CmisInMemoryRunner.getCmisPort();
 
         assertNotNull("The object should not be null", port);
 
@@ -73,7 +73,7 @@ public class CmisInMemoryRunnerTest {
     public void getPortDefinedByUser() throws Exception {
         assertEquals(
                 "The port should be 8080",
-                java.util.Optional.ofNullable(CmisInMemoryRunner.CMIS_PORT),
+                java.util.Optional.ofNullable(CmisInMemoryRunner.getCmisPort()),
                 java.util.Optional.ofNullable(8080)
         );
     }
