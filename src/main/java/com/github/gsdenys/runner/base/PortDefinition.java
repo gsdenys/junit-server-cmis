@@ -13,7 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.gsdenys.cmisrunner;
+package com.github.gsdenys.runner.base;
+
+import com.github.gsdenys.CmisInMemoryRunner;
+import com.github.gsdenys.runner.Configure;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -25,7 +28,7 @@ import java.net.ServerSocket;
  * @version 1.3.0
  * @since 1.3.0
  */
-class PortDefinition {
+public class PortDefinition {
 
     private CmisInMemoryRunner runner;
 
@@ -34,7 +37,7 @@ class PortDefinition {
      *
      * @param runner the runner object
      */
-    PortDefinition(CmisInMemoryRunner runner) {
+    public PortDefinition(CmisInMemoryRunner runner) {
         this.runner = runner;
     }
 
@@ -43,7 +46,7 @@ class PortDefinition {
      *
      * @return Integer the defineCmisServerPort of jetty exeecution
      */
-    Integer defineCmisServerPort() {
+    public Integer defineCmisServerPort() {
         Integer port = this.getPortDefinedByUser();
 
         if (port != null) {
@@ -62,7 +65,7 @@ class PortDefinition {
      *
      * @return the CMIS server port
      */
-    Integer getPortDefinedByUser() {
+    public Integer getPortDefinedByUser() {
         //in case of test class was annotated with @configure
         if (runner.getTestClass().getJavaClass().isAnnotationPresent(Configure.class)) {
             Configure configure = runner.getTestClass().getJavaClass().getDeclaredAnnotation(Configure.class);

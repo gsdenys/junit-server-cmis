@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.gsdenys.cmisrunner;
+package com.github.gsdenys;
 
-import com.github.gsdenys.cmisrunner.CmisInMemoryRunner;
-import com.github.gsdenys.cmisrunner.Configure;
+import com.github.gsdenys.runner.Configure;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,6 +25,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 /**
  * Test for the {@link CmisInMemoryRunner} class
  *
@@ -34,24 +36,45 @@ import java.net.URL;
  * @since 0.0.1
  */
 @RunWith(CmisInMemoryRunner.class)
-@Configure(
-        port = 9191
-)
-public class ConfigureTest {
+@Configure(port = 8080)
+public class CmisInMemoryRunnerTest {
 
     @Test
     public void testConnection() throws Exception {
-        URL url = new URL("http://localhost:9191/cmis/atom");
+
+        URL url = new URL("http://localhost:" + CmisInMemoryRunner.getCmisPort() + "/cmis/atom");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Accept", "application/json");
 
-        Assert.assertEquals("The Response code should be 200", conn.getResponseCode(), 200);
+        assertEquals("The Response code should be 200", conn.getResponseCode(), 200);
 
         BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 
         Assert.assertNotNull("The return should be null", br.readLine());
 
         conn.disconnect();
+    }
+
+    @Test
+    public void getCmisPort() throws Exception {
+        Integer port = CmisInMemoryRunner.getCmisPort();
+
+        assertNotNull("The object should not be null", port);
+
+        assertEquals(
+                "The port should be 8080",
+                java.util.Optional.ofNullable(port),
+                java.util.Optional.ofNullable(8080)
+        );
+    }
+
+    @Test
+    public void getPortDefinedByUser() throws Exception {
+        assertEquals(
+                "The port should be 8080",
+                java.util.Optional.ofNullable(CmisInMemoryRunner.getCmisPort()),
+                java.util.Optional.ofNullable(8080)
+        );
     }
 }

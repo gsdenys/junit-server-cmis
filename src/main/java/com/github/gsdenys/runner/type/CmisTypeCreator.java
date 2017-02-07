@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.gsdenys.cmisrunner.type;
+package com.github.gsdenys.runner.type;
 
 /**
  * Class to create the document type in the CMIS In Memory Runner

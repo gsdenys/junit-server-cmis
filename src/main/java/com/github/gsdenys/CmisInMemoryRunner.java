@@ -13,32 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.gsdenys.cmisrunner;
+package com.github.gsdenys;
 
+import com.github.gsdenys.runner.base.CmisWarFinder;
+import com.github.gsdenys.runner.base.PortDefinition;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * Start a CMIS In Memory with Jetty Server.
  *
  * @author Denys G. Santos (gsdenys@gmail.com)
- * @version 0.0.1
+ * @version 1.0.3
  * @since 0.0.1
  */
 public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
 
-    private static Integer CMIS_PORT;
+    private static int cmisPort;
     private static boolean initialized = false;
-
-    private PortDefinition portDefinition;
-    private CmisWarFinder cmisWarFinder;
-
     private static Server server;
+
 
     /**
      * CMIS In Memory Starter
@@ -49,32 +45,52 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
     public CmisInMemoryRunner(Class<?> clazz) throws InitializationError {
         super(clazz);
 
-        this.portDefinition = new PortDefinition(this);
-        this.cmisWarFinder = new CmisWarFinder();
+        PortDefinition def = new PortDefinition(this);
+        int port = def.defineCmisServerPort();
 
-        synchronized (clazz) {
-            Integer port = portDefinition.getPortDefinedByUser();
-            if (port != null && server != null && server.isRunning() && !CMIS_PORT.equals(port)) {
-                try {
-                    server.stop();
-                    initialized = false;
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    throw new InitializationError("Unable to stop server");
-                }
+        //change the jetty running port and mark the server initialized as false
+        //it means tha the server needs to be restarted using the new port
+        if(cmisPort != port) {
+            cmisPort = port;
+            initialized = false;
+        }
+
+        //stop jetty server if it is started and the initialized was marked as false
+        //sometimes it occur when some test define a port different that the actual
+        //jetty server port
+        if(server != null && server.isRunning() && !initialized) {
+            try {
+                server.stop();
+                server.destroy();
+            } catch (Exception e) {
+               throw new InitializationError(
+                       "Unable to stop and destroy the active instance of jetty  server"
+               );
             }
+        }
 
+        //initialize the server
+        synchronized (clazz) {
             if (!initialized) {
-                String filePath = this.cmisWarFinder.getCmisWarPath();
-                CMIS_PORT = this.portDefinition.defineCmisServerPort();
-
                 try {
-                    initialized = this.startJettyServer(filePath, CMIS_PORT);
+                    initialized = this.startJettyServer(
+                            new CmisWarFinder().getCmisWarPath(),
+                            cmisPort
+                    );
                 } catch (Exception e) {
                     throw new InitializationError(e);
                 }
             }
         }
+    }
+
+    /**
+     * Get the defineCmisServerPort where the CMIS server was started
+     *
+     * @return the CMIS server defineCmisServerPort
+     */
+    public static Integer getCmisPort() {
+        return cmisPort;
     }
 
     /**
@@ -85,26 +101,17 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
      * @return boolean
      * @throws Exception any exception that can occur
      */
-    private boolean startJettyServer(String cmisWar, Integer port) throws Exception {
+    private boolean startJettyServer(final String cmisWar, final Integer port) throws Exception {
         this.server = new Server(port);
 
         WebAppContext webapp = new WebAppContext();
         webapp.setContextPath("/cmis/");
         webapp.setWar(cmisWar);
 
-        this.server.setHandler(webapp);
+        server.setHandler(webapp);
 
-        this.server.start();
+        server.start();
 
         return true;
-    }
-
-    /**
-     * Get the defineCmisServerPort where the CMIS server was started
-     *
-     * @return the CMIS server defineCmisServerPort
-     */
-    public static Integer getCmisPort() {
-        return CMIS_PORT;
     }
 }

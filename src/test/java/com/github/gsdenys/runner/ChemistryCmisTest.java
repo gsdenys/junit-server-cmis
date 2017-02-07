@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.gsdenys.cmisrunner;
+package com.github.gsdenys.runner;
 
-import com.github.gsdenys.cmisrunner.CmisInMemoryRunner;
+import com.github.gsdenys.CmisInMemoryRunner;
 import org.apache.chemistry.opencmis.client.api.*;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.github.gsdenys.cmisrunner;
+package com.github.gsdenys.runner;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -45,5 +45,5 @@ public @interface Configure {
      *
      * @return the descriptor file
      */
-    String[] descritor() default {};
+    TypeDescriptor[] descritor() default {};
 }
