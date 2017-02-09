@@ -20,6 +20,7 @@ import com.github.gsdenys.runner.Configure;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * Class to define a better way to use port.
@@ -46,10 +47,10 @@ public class PortDefinition {
      *
      * @return Integer the defineCmisServerPort of jetty exeecution
      */
-    public Integer defineCmisServerPort() {
+    public int defineCmisServerPort() {
         Integer port = this.getPortDefinedByUser();
 
-        if (port != null) {
+        if (port != 0) {
             return port;
         }
 
@@ -65,13 +66,33 @@ public class PortDefinition {
      *
      * @return the CMIS server port
      */
-    public Integer getPortDefinedByUser() {
+    public int getPortDefinedByUser() {
+
+        System.out.println("\n\n CLASS: " + this.runner.getTestClass());
+
         //in case of test class was annotated with @configure
-        if (runner.getTestClass().getJavaClass().isAnnotationPresent(Configure.class)) {
-            Configure configure = runner.getTestClass().getJavaClass().getDeclaredAnnotation(Configure.class);
+        if (this.runner.getTestClass().getJavaClass().isAnnotationPresent(Configure.class)) {
+            Configure configure = this.runner.getTestClass().getJavaClass().getDeclaredAnnotation(Configure.class);
+
+            System.out.println("\n\n\n PORT: " + configure.port());
+
             return configure.port();
         }
 
-        return null;
+        return 0;
+    }
+
+    /**
+     * check the port availability
+     *
+     * @param port the port
+     * @return boolean <code>true</code> if the port is available
+     */
+    public boolean isPortAvailable(int port) {
+        try (Socket ignored = new Socket("localhost", port)) {
+            return false;
+        } catch (IOException ignored) {
+            return true;
+        }
     }
 }

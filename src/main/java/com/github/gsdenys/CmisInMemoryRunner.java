@@ -22,6 +22,10 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
 
+import java.net.URI;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Start a CMIS In Memory with Jetty Server.
  *
@@ -31,7 +35,6 @@ import org.junit.runners.model.InitializationError;
  */
 public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
 
-    private static int cmisPort;
     private static boolean initialized = false;
     private static Server server;
 
@@ -46,27 +49,13 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
         super(clazz);
 
         PortDefinition def = new PortDefinition(this);
-        int port = def.defineCmisServerPort();
+        int portDefinedByProgramer = def.defineCmisServerPort();
 
-        //change the jetty running port and mark the server initialized as false
-        //it means tha the server needs to be restarted using the new port
-        if(cmisPort != port) {
-            cmisPort = port;
-            initialized = false;
-        }
+        this.preLoad(portDefinedByProgramer);
 
-        //stop jetty server if it is started and the initialized was marked as false
-        //sometimes it occur when some test define a port different that the actual
-        //jetty server port
-        if(server != null && server.isRunning() && !initialized) {
-            try {
-                server.stop();
-                server.destroy();
-            } catch (Exception e) {
-               throw new InitializationError(
-                       "Unable to stop and destroy the active instance of jetty  server"
-               );
-            }
+        //check the port availability
+        if (!def.isPortAvailable(portDefinedByProgramer)) {
+            throw new InitializationError("The port '" + portDefinedByProgramer + "' is not available to use.");
         }
 
         //initialize the server
@@ -75,7 +64,7 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
                 try {
                     initialized = this.startJettyServer(
                             new CmisWarFinder().getCmisWarPath(),
-                            cmisPort
+                            portDefinedByProgramer
                     );
                 } catch (Exception e) {
                     throw new InitializationError(e);
@@ -90,7 +79,69 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
      * @return the CMIS server defineCmisServerPort
      */
     public static Integer getCmisPort() {
-        return cmisPort;
+        String regex = "(.*:)(\\d+)(/.*)";
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(server.getURI().toString());
+
+        String prt = matcher.find() ? matcher.group(2) : "0";
+
+        return Integer.parseInt(prt);
+    }
+
+    /**
+     * Get the CMIS URI
+     *
+     * @return URI the cmis uri
+     */
+    public static URI getCmisURI() {
+        return server.getURI();
+    }
+
+    /**
+     * Check if jetty restart is required
+     *
+     * @param portDefinedByProgramer the port defined by user
+     * @return boolean <code>true</code> case restart is required
+     */
+    private boolean isRestartRequired(final int portDefinedByProgramer) {
+        boolean jettyRestartRequired = false;
+
+        //case server is running
+        if(server != null && server.isRunning()) {
+
+            //case jetty was started at different port that defined at @Configure annotation (field port)
+            if (getCmisPort() != portDefinedByProgramer) {
+                jettyRestartRequired = true;
+            }
+
+            //case CMIS has any no defined type that was configured at @Configure annotation (field docTypes)
+            //TODO check the type definition load
+
+        }
+
+        return jettyRestartRequired;
+    }
+
+
+    /**
+     * Execute extra commands before start jetty server
+     *
+     * @param portDefinedByProgramer the port defined by user
+     * @throws InitializationError when the stop jetty command fault
+     */
+    private void preLoad(final int portDefinedByProgramer) throws InitializationError{
+
+        if(this.isRestartRequired(portDefinedByProgramer)) {
+
+            initialized = false;
+
+            try {
+                server.stop();
+            } catch (Exception e) {
+                throw new InitializationError("Unable to stop and destroy the active instance of jetty  server");
+            }
+        }
     }
 
     /**
@@ -102,14 +153,13 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
      * @throws Exception any exception that can occur
      */
     private boolean startJettyServer(final String cmisWar, final Integer port) throws Exception {
-        this.server = new Server(port);
+        server = new Server(port);
 
         WebAppContext webapp = new WebAppContext();
         webapp.setContextPath("/cmis/");
         webapp.setWar(cmisWar);
 
         server.setHandler(webapp);
-
         server.start();
 
         return true;

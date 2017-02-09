@@ -33,11 +33,11 @@ import java.lang.annotation.Target;
 public @interface Configure {
 
     /**
-     * the port where the cmis server will run. By default 8080
+     * the port where the cmis server will run. By default 0 that means will be used a random port
      *
      * @return int  the port where the cmis server need to be started
      */
-    int port() default 8080;
+    int port() default 0;
 
 
     /**
@@ -45,5 +45,5 @@ public @interface Configure {
      *
      * @return the descriptor file
      */
-    TypeDescriptor[] descritor() default {};
+    TypeDescriptor[] docTypes() default {};
 }

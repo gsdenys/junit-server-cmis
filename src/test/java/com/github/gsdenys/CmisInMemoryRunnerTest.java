@@ -40,8 +40,14 @@ import static org.junit.Assert.assertNotNull;
 public class CmisInMemoryRunnerTest {
 
     @Test
+    public void getCmisURI() throws Exception {
+
+    }
+
+    @Test
     public void testConnection() throws Exception {
 
+        System.out.println("\n\n\n\n" + CmisInMemoryRunner.getCmisPort() + "\n\n\n\n\n");
         URL url = new URL("http://localhost:" + CmisInMemoryRunner.getCmisPort() + "/cmis/atom");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
