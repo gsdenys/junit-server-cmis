@@ -15,14 +15,21 @@
  */
 package com.github.gsdenys;
 
+import com.github.gsdenys.runner.Configure;
+import com.github.gsdenys.runner.base.CmisVersionDefinition;
 import com.github.gsdenys.runner.base.CmisWarFinder;
+import com.github.gsdenys.runner.base.DocumentTypeLoader;
 import com.github.gsdenys.runner.base.PortDefinition;
+import com.github.gsdenys.runner.type.creator.TypeCreator;
+import com.github.gsdenys.runner.type.parser.ParserException;
+import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.InitializationError;
 
 import java.net.URI;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,6 +44,7 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
 
     private static boolean initialized = false;
     private static Server server;
+    private static CmisVersionDefinition versionDefinition;
 
 
     /**
@@ -48,8 +56,12 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
     public CmisInMemoryRunner(Class<?> clazz) throws InitializationError {
         super(clazz);
 
+        versionDefinition = new CmisVersionDefinition(this);
+
         PortDefinition def = new PortDefinition(this);
         int portDefinedByProgramer = def.defineCmisServerPort();
+
+        TypeCreator typeCreator = new TypeCreator();
 
         this.preLoad(portDefinedByProgramer);
 
@@ -66,11 +78,20 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
                             new CmisWarFinder().getCmisWarPath(),
                             portDefinedByProgramer
                     );
+
+                    DocumentTypeLoader loader = new DocumentTypeLoader(this);
+                    List<TypeDefinition> list = loader.load();
+
+                    list.forEach(typeCreator::execute);
+
+
                 } catch (Exception e) {
                     throw new InitializationError(e);
                 }
             }
         }
+
+
     }
 
     /**
@@ -95,7 +116,11 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
      * @return URI the cmis uri
      */
     public static URI getCmisURI() {
-        return server.getURI();
+        if(versionDefinition == null) {
+            return URI.create(server.getURI().toString().concat("/atom"));
+        }
+
+        return URI.create(server.getURI().toString().concat(versionDefinition.getCmisPath()));
     }
 
     /**

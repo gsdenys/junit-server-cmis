@@ -16,6 +16,10 @@
 package com.github.gsdenys.runner;
 
 import com.github.gsdenys.CmisInMemoryRunner;
+import com.github.gsdenys.runner.type.creator.TypeCreator;
+import org.apache.chemistry.opencmis.client.api.ObjectType;
+import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.commons.enums.CmisVersion;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +27,7 @@ import org.junit.runner.RunWith;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.URI;
 
 /**
  * Test for the {@link CmisInMemoryRunner} class
@@ -33,13 +37,22 @@ import java.net.URL;
  * @since 0.0.1
  */
 @RunWith(CmisInMemoryRunner.class)
-@Configure(port = 9191)
+@Configure(
+        port = 9191,
+        cmisVersion = CmisVersion.CMIS_1_1,
+        docTypes = {
+                @TypeDescriptor(
+                        file = "cmis-type.json",
+                        loader = TypeLoader.JSON
+                )
+        }
+)
 public class ConfigureTest {
 
     @Test
     public void testConnection() throws Exception {
-        URL url = new URL("http://localhost:9191/cmis/atom");
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        URI uri = CmisInMemoryRunner.getCmisURI();
+        HttpURLConnection conn = (HttpURLConnection) uri.toURL().openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Accept", "application/json");
 
@@ -50,5 +63,22 @@ public class ConfigureTest {
         Assert.assertNotNull("The return should be null", br.readLine());
 
         conn.disconnect();
+    }
+
+    @Test
+    public void checkDocumentType() throws Exception {
+        TypeCreator creator = new TypeCreator();
+
+        Session session = creator.getSession();
+
+        ObjectType objType = session.getTypeDefinition("tst:doc");
+
+        Assert.assertNotNull("The Object type should not be null", objType);
+        Assert.assertEquals(
+                "The object type local namespace should be 'tst'",
+                objType.getLocalNamespace(),
+                "tst"
+        );
+
     }
 }

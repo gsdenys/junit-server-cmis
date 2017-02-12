@@ -42,5 +42,5 @@ public @interface TypeDescriptor {
      *
      * @return TypeLoader the loader to be used
      */
-    TypeLoader loader();
+    TypeLoader loader() default TypeLoader.JSON;
 }

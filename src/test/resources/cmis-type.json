@@ -1,0 +1,66 @@
+{
+  "types": [
+    {
+      "id" : "tst:doc",
+      "localName" : "Test Document",
+      "localNamespace" : "tst",
+      "queryName" : "tst:doc",
+      "displayName" : "Test Document",
+      "description" : "The document type used by test",
+      "baseId" : "cmis:document",
+      "parentTypeId" : "cmis:document",
+      "propertyDefinitions" : [
+        {
+          "id" : "tst:booleanX",
+          "localName" : "booleanX",
+          "localNamespace" : "tst",
+          "displayName" : "New Boolean",
+          "description" : "A New Booolean",
+          "queryName" : "tst:booleanX",
+          "propertyType" : "boolean"
+        },
+        {
+          "id" : "tst:stringX",
+          "localName" : "stringX",
+          "localNamespace" : "tst",
+          "displayName" : "New String",
+          "propertyType" : "string"
+        }
+      ]
+    },
+    {
+      "id" : "tst:folderN",
+      "localName" : "folderN",
+      "localNamespace" : "tst",
+      "displayName" : "Folder N",
+      "baseId" : "cmis:folder",
+      "parentTypeId" : "cmis:folder"
+    },
+    {
+      "id" : "tst:itenN",
+      "localName" : "itenN",
+      "localNamespace" : "tst",
+      "displayName" : "Folder N",
+      "baseId" : "cmis:item",
+      "parentTypeId" : "cmis:item"
+    },
+    {
+      "id" : "tst:doc2",
+      "localName" : "doc2",
+      "localNamespace" : "tst",
+      "displayName" : "Doc 2",
+      "description" : "Desc of doc 2",
+      "baseId" : "cmis:document",
+      "parentTypeId" : "tst:doc",
+      "propertyDefinitions" : [
+        {
+          "id" : "tst:stringN",
+          "localName" : "stringN",
+          "localNamespace" : "tst",
+          "displayName" : "New String N",
+          "propertyType" : "string"
+        }
+      ]
+    }
+  ]
+}

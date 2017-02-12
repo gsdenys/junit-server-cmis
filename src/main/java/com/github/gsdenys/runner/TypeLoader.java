@@ -19,14 +19,11 @@ package com.github.gsdenys.runner;
  * The type loader definition
  *
  * @author Denys G. Santos (gsdenys@gmail.com)
- * @version 1.3.0
+ * @version 1.0.0
  * @since 1.3.0
  */
 public enum TypeLoader {
+    JSON,
     ALFRESCO,
-    DOCUMENTUM,
-    FILENET,
-    NUXEO,
-    OPEN_TEXT,
-    ORACLE;
+    NUXEO
 }

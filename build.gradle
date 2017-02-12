@@ -16,9 +16,14 @@ dependencies {
     compile group: 'junit', name: 'junit', version: '4.11'
     compile group: 'org.eclipse.jetty', name: 'jetty-server', version: '9.4.0.v20161208'
     compile group: 'org.eclipse.jetty', name: 'jetty-webapp', version: '9.4.0.v20161208'
-    compile group: 'org.apache.chemistry.opencmis', name: 'chemistry-opencmis-server-inmemory', version: '1.0.0', ext: 'war'
 
-    testCompile group: 'org.apache.chemistry.opencmis', name: 'chemistry-opencmis-client-impl', version: '1.0.0'
+    compile group: 'org.apache.chemistry.opencmis', name: 'chemistry-opencmis-server-inmemory', version: '1.0.0', ext: 'war'
+    compile group: 'org.apache.chemistry.opencmis', name: 'chemistry-opencmis-commons-api', version: '1.0.0'
+    compile group: 'org.apache.chemistry.opencmis', name: 'chemistry-opencmis-commons-impl', version: '1.0.0'
+
+    compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+    compile group: 'org.apache.chemistry.opencmis', name: 'chemistry-opencmis-client-impl', version: '1.0.0'
 }
 
 

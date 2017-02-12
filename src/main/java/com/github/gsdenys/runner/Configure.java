@@ -15,6 +15,8 @@
  */
 package com.github.gsdenys.runner;
 
+import org.apache.chemistry.opencmis.commons.enums.CmisVersion;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -33,15 +35,22 @@ import java.lang.annotation.Target;
 public @interface Configure {
 
     /**
-     * the port where the cmis server will run. By default 0 that means will be used a random port
+     * the port where the cmis server will run. By json 0 that means will be used a random port
      *
      * @return int  the port where the cmis server need to be started
      */
     int port() default 0;
 
+    /**
+     * The cmisVersion
+     *
+     * @return CmisVersion the cmisVersion of cmis
+     */
+    CmisVersion cmisVersion() default CmisVersion.CMIS_1_1;
 
     /**
-     * The document type descriptor file.
+     * The document type descriptor file. This parameter use needs a {@link Configure#cmisVersion()}
+     * equals {@link CmisVersion#CMIS_1_1}
      *
      * @return the descriptor file
      */
