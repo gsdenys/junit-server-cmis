@@ -1,11 +1,14 @@
 package com.github.gsdenys.runner.type.creator;
 
 import com.github.gsdenys.CmisInMemoryRunner;
+import org.apache.chemistry.opencmis.client.api.ObjectType;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
 import org.apache.chemistry.opencmis.commons.enums.BaseTypeId;
 import org.apache.chemistry.opencmis.commons.enums.PropertyType;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.DocumentTypeDefinitionImpl;
 import org.apache.chemistry.opencmis.commons.impl.dataobjects.PropertyBooleanDefinitionImpl;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,8 +38,9 @@ public class CreateNewTypeTest {
         docDef.setBaseTypeId(BaseTypeId.CMIS_DOCUMENT);
         docDef.setDescription("a new type");
         docDef.setDisplayName("Test Document Type");
-        docDef.setLocalName("Doc Type");
+        docDef.setLocalName("DocType");
         docDef.setParentTypeId("cmis:document");
+        docDef.setLocalNamespace("tst");
 
         Map<String, PropertyDefinition<?>> propertyDefinitions = new HashMap<>();
 
@@ -54,6 +58,19 @@ public class CreateNewTypeTest {
 
 
         this.createNewType.execute(docDef);
+
+        //assert
+        TypeCreator creator = new TypeCreator();
+        Session session = creator.getSession();
+
+        ObjectType objType = session.getTypeDefinition("tst:doctype");
+
+        Assert.assertNotNull("The Object type should not be null", objType);
+        Assert.assertEquals(
+                "The object type local namespace should be 'tst'",
+                objType.getLocalNamespace(),
+                "tst"
+        );
     }
 
 }

@@ -20,7 +20,7 @@ import com.github.gsdenys.runner.Configure;
 import org.apache.chemistry.opencmis.commons.enums.CmisVersion;
 
 /**
- /**
+ * /**
  * Class to define help define CMIS Version.
  *
  * @author Denys G. Santos (gsdenys@gmail.com)
@@ -28,6 +28,9 @@ import org.apache.chemistry.opencmis.commons.enums.CmisVersion;
  * @since 1.3.0
  */
 public class CmisVersionDefinition {
+
+    public static final String CMIS_RELATIVE_URL_1_0 = "/atom";
+    public static final String CMIS_RELATIVE_URL_1_1 = "/atom11";
 
     private CmisInMemoryRunner runner;
 
@@ -45,7 +48,7 @@ public class CmisVersionDefinition {
      *
      * @return CmisVersion the version of CMIS
      */
-    public CmisVersion getCmisVersion(){
+    public CmisVersion getCmisVersion() {
         //in case of test class was annotated with @configure
         if (this.runner.getTestClass().getJavaClass().isAnnotationPresent(Configure.class)) {
             Configure configure = this.runner.getTestClass().getJavaClass().getDeclaredAnnotation(Configure.class);
@@ -62,10 +65,10 @@ public class CmisVersionDefinition {
      * @return String the CMIS relative path
      */
     public String getCmisPath() {
-        if(this.getCmisVersion().equals(CmisVersion.CMIS_1_0)) {
-            return "/atom";
+        if (this.getCmisVersion().equals(CmisVersion.CMIS_1_0)) {
+            return CmisVersionDefinition.CMIS_RELATIVE_URL_1_0;
         }
 
-        return "/atom11";
+        return CmisVersionDefinition.CMIS_RELATIVE_URL_1_1;
     }
 }

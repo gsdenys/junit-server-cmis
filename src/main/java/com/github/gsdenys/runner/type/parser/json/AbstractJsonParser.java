@@ -35,7 +35,7 @@ abstract class AbstractJsonParser {
      *
      * @param propertyType the property type
      */
-    AbstractPropertyDefinition definePropertyType(final String propertyType) {
+    protected AbstractPropertyDefinition definePropertyType(final String propertyType) {
         AbstractPropertyDefinition propDef = null;
 
         if (propertyType.equals(PropertyType.BOOLEAN.value())) {
@@ -69,17 +69,18 @@ abstract class AbstractJsonParser {
 
     /**
      * Load the {@link AbstractTypeDefinition} with the JSON parameters
+     *
      * @param prop
      * @param jObj
      */
-    void loadPropertyDef(AbstractPropertyDefinition prop, JSONObject jObj) {
+    protected void loadPropertyDef(AbstractPropertyDefinition prop, JSONObject jObj) {
         //String Required
         prop.setId((String) jObj.get(Parser.ID));
         prop.setLocalName((String) jObj.get(Parser.LOCAL_NAME));
         prop.setLocalNamespace((String) jObj.get(Parser.LOCAL_NAMESPACE));
 
         prop.setQueryName(
-                (jObj.get(Parser.QUERY_NAME) != null)?
+                (jObj.get(Parser.QUERY_NAME) != null) ?
                         (String) jObj.get(Parser.QUERY_NAME) :
                         (String) jObj.get(Parser.ID)
         );
@@ -90,7 +91,7 @@ abstract class AbstractJsonParser {
                         (String) jObj.get(Parser.ID)
         );
         prop.setDescription(
-                (jObj.get(Parser.DESCRIPTION) != null)?
+                (jObj.get(Parser.DESCRIPTION) != null) ?
                         (String) jObj.get(Parser.DESCRIPTION) :
                         ""
         );
@@ -122,7 +123,7 @@ abstract class AbstractJsonParser {
      *
      * @param baseId the base ID of element type
      */
-    AbstractTypeDefinition defineType(final String baseId) {
+    protected AbstractTypeDefinition defineType(final String baseId) {
         AbstractTypeDefinition typeDef = null;
 
         //define the type of
@@ -142,16 +143,17 @@ abstract class AbstractJsonParser {
             typeDef = new SecondaryTypeDefinitionImpl();
             typeDef.setBaseTypeId(BaseTypeId.CMIS_SECONDARY);
             typeDef.setIsFileable(false);
-        }return typeDef;
+        }
+        return typeDef;
     }
 
     /**
      * Populate the {@link AbstractTypeDefinition} object with the JSON content
      *
-     * @param typeDef       the type to be populated
-     * @param jObj the content used to populate the type
+     * @param typeDef the type to be populated
+     * @param jObj    the content used to populate the type
      */
-    void loadTypeDef(AbstractTypeDefinition typeDef, final JSONObject jObj) {
+    protected void loadTypeDef(AbstractTypeDefinition typeDef, final JSONObject jObj) {
         //String Required
         typeDef.setId((String) jObj.get(Parser.ID));
         typeDef.setLocalName((String) jObj.get(Parser.LOCAL_NAME));

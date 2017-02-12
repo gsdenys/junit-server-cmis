@@ -23,6 +23,7 @@ import org.junit.runner.RunWith;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
@@ -41,14 +42,15 @@ public class CmisInMemoryRunnerTest {
 
     @Test
     public void getCmisURI() throws Exception {
+        URI uriBase = CmisInMemoryRunner.getCmisURI();
+        URI uriCompare = new URI("http://localhost:" + CmisInMemoryRunner.getCmisPort() + "/cmis/atom11");
 
+        Assert.assertEquals("Both URLs must be equals", uriBase, uriCompare);
     }
 
     @Test
     public void testConnection() throws Exception {
-
-        System.out.println("\n\n\n\n" + CmisInMemoryRunner.getCmisPort() + "\n\n\n\n\n");
-        URL url = new URL("http://localhost:" + CmisInMemoryRunner.getCmisPort() + "/cmis/atom");
+        URL url = CmisInMemoryRunner.getCmisURI().toURL();
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("GET");
         conn.setRequestProperty("Accept", "application/json");
@@ -57,7 +59,7 @@ public class CmisInMemoryRunnerTest {
 
         BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 
-        Assert.assertNotNull("The return should be null", br.readLine());
+        Assert.assertNotNull("The buffered reader should be null", br);
 
         conn.disconnect();
     }

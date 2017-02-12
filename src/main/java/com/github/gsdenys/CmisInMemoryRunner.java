@@ -15,7 +15,6 @@
  */
 package com.github.gsdenys;
 
-import com.github.gsdenys.runner.Configure;
 import com.github.gsdenys.runner.base.CmisVersionDefinition;
 import com.github.gsdenys.runner.base.CmisWarFinder;
 import com.github.gsdenys.runner.base.DocumentTypeLoader;
@@ -42,10 +41,13 @@ import java.util.regex.Pattern;
  */
 public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
 
+    private static final String CMIS_JETTY_CONTEXT = "/cmis/";
     private static boolean initialized = false;
     private static Server server;
     private static CmisVersionDefinition versionDefinition;
+    private static List<TypeDefinition> typeDefinitionList;
 
+    private DocumentTypeLoader documentTypeLoader;
 
     /**
      * CMIS In Memory Starter
@@ -62,6 +64,7 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
         int portDefinedByProgramer = def.defineCmisServerPort();
 
         TypeCreator typeCreator = new TypeCreator();
+        this.documentTypeLoader = new DocumentTypeLoader(this);
 
         this.preLoad(portDefinedByProgramer);
 
@@ -79,12 +82,9 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
                             portDefinedByProgramer
                     );
 
-                    DocumentTypeLoader loader = new DocumentTypeLoader(this);
-                    List<TypeDefinition> list = loader.load();
+                    typeDefinitionList = documentTypeLoader.load();
 
-                    list.forEach(typeCreator::execute);
-
-
+                    typeDefinitionList.forEach(typeCreator::execute);
                 } catch (Exception e) {
                     throw new InitializationError(e);
                 }
@@ -116,8 +116,12 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
      * @return URI the cmis uri
      */
     public static URI getCmisURI() {
-        if(versionDefinition == null) {
-            return URI.create(server.getURI().toString().concat("/atom"));
+        if (versionDefinition == null) {
+            return URI.create(
+                    server.getURI().toString().concat(
+                            CmisVersionDefinition.CMIS_RELATIVE_URL_1_1
+                    )
+            );
         }
 
         return URI.create(server.getURI().toString().concat(versionDefinition.getCmisPath()));
@@ -130,22 +134,38 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
      * @return boolean <code>true</code> case restart is required
      */
     private boolean isRestartRequired(final int portDefinedByProgramer) {
-        boolean jettyRestartRequired = false;
-
         //case server is running
-        if(server != null && server.isRunning()) {
+        if (server != null && server.isRunning()) {
 
             //case jetty was started at different port that defined at @Configure annotation (field port)
             if (getCmisPort() != portDefinedByProgramer) {
-                jettyRestartRequired = true;
+                return true;
             }
 
             //case CMIS has any no defined type that was configured at @Configure annotation (field docTypes)
-            //TODO check the type definition load
+            try {
+                List<TypeDefinition> typeDef = this.documentTypeLoader.load();
+
+                for (TypeDefinition td : typeDefinitionList) {
+                    for (int i = 0; i < typeDef.size(); i++) {
+                        TypeDefinition td2 = typeDef.get(i);
+                        if (td.getId().equals(td2.getId())) {
+                            typeDef.remove(i);
+                            break;
+                        }
+                    }
+                }
+
+                if (typeDef.size() > 0) {
+                    return true;
+                }
+            } catch (ParserException e) {
+                e.printStackTrace();
+            }
 
         }
 
-        return jettyRestartRequired;
+        return false;
     }
 
 
@@ -155,9 +175,9 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
      * @param portDefinedByProgramer the port defined by user
      * @throws InitializationError when the stop jetty command fault
      */
-    private void preLoad(final int portDefinedByProgramer) throws InitializationError{
+    private void preLoad(final int portDefinedByProgramer) throws InitializationError {
 
-        if(this.isRestartRequired(portDefinedByProgramer)) {
+        if (this.isRestartRequired(portDefinedByProgramer)) {
 
             initialized = false;
 
@@ -181,7 +201,7 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
         server = new Server(port);
 
         WebAppContext webapp = new WebAppContext();
-        webapp.setContextPath("/cmis/");
+        webapp.setContextPath(CmisInMemoryRunner.CMIS_JETTY_CONTEXT);
         webapp.setWar(cmisWar);
 
         server.setHandler(webapp);

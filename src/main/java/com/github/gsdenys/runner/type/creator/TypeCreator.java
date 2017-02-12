@@ -6,10 +6,8 @@ import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.api.SessionFactory;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
 import org.apache.chemistry.opencmis.commons.SessionParameter;
-import org.apache.chemistry.opencmis.commons.definitions.MutableTypeDefinition;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 import org.apache.chemistry.opencmis.commons.enums.BindingType;
-import org.apache.chemistry.opencmis.commons.enums.CmisVersion;
 
 import java.net.URI;
 import java.util.HashMap;

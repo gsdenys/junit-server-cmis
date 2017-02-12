@@ -72,7 +72,6 @@ public class DefaultParserTest {
                     "          \"id\" : \"tst:stringX\",\n" +
                     "          \"localName\" : \"stringX\",\n" +
                     "          \"localNamespace\" : \"tst\",\n" +
-                    "          \"displayName\" : \"New String\",\n" +
                     "          \"propertyType\" : \"string\"\n" +
                     "        }\n" +
                     "      ]\n" +
@@ -120,6 +119,13 @@ public class DefaultParserTest {
 
         Assert.assertNotNull("The PropertyDefinition should not be null", pDef);
         Assert.assertEquals("The local name should be 'booleanX'", pDef.getLocalName(), "booleanX");
+
+        JSONObject jObj2 = (JSONObject) array.get(1);
+
+        PropertyDefinition pDef2 = this.parser.loadProperty(jObj2);
+
+        Assert.assertNotNull("The PropertyDefinition should not be null", pDef2);
+        Assert.assertEquals("The local name should be 'booleanX'", pDef2.getLocalName(), "stringX");
     }
 
 }

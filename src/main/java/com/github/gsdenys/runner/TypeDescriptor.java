@@ -22,7 +22,7 @@ package com.github.gsdenys.runner;
  * that point to the loader that will be used to parse the document type file
  *
  * @author Denys G. Santos (gsdenys@gmail.com)
- * @version 1.3.0
+ * @version 1.0.2
  * @since 1.3.0
  */
 public @interface TypeDescriptor {

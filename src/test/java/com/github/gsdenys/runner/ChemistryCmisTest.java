@@ -25,6 +25,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +38,13 @@ import java.util.Map;
  * @since 0.0.1
  */
 @RunWith(CmisInMemoryRunner.class)
+@Configure(
+        docTypes = {
+                @TypeDescriptor(
+                        file = "cmis-type.json"
+                )
+        }
+)
 public class ChemistryCmisTest {
 
     private Map<String, String> parameter;
@@ -45,19 +53,14 @@ public class ChemistryCmisTest {
 
     @Before
     public void setUp() throws Exception {
-        StringBuilder builder = new StringBuilder();
-        builder.append("http://");
-        builder.append("localhost");
-        builder.append(":");
-        builder.append(CmisInMemoryRunner.getCmisPort());
-        builder.append("/cmis/atom");
+        URI uri = CmisInMemoryRunner.getCmisURI();
 
         if (this.parameter == null) {
             this.parameter = new HashMap<>();
 
             this.parameter.put(SessionParameter.USER, "test");
             this.parameter.put(SessionParameter.PASSWORD, "test");
-            this.parameter.put(SessionParameter.ATOMPUB_URL, builder.toString());
+            this.parameter.put(SessionParameter.ATOMPUB_URL, uri.toString());
             this.parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
             this.parameter.put(SessionParameter.REPOSITORY_ID, "A1");
         }

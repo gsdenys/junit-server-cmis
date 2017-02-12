@@ -36,11 +36,11 @@ public class DocumentTypeLoader {
             TypeDescriptor[] typeDescArray = configure.docTypes();
 
             for (TypeDescriptor tDesc : typeDescArray) {
-                if(tDesc.loader().equals(TypeLoader.JSON)) {
+                if (tDesc.loader().equals(TypeLoader.JSON)) {
                     return this.jsonLoader(tDesc.file());
-                } else if(tDesc.loader().equals(TypeLoader.ALFRESCO)) {
+                } else if (tDesc.loader().equals(TypeLoader.ALFRESCO)) {
                     return this.alfrescoLoader(tDesc.file());
-                } else if(tDesc.loader().equals(TypeLoader.NUXEO)) {
+                } else if (tDesc.loader().equals(TypeLoader.NUXEO)) {
                     return this.nuxeoLoader(tDesc.file());
                 }
             }
@@ -49,21 +49,21 @@ public class DocumentTypeLoader {
         return new ArrayList<TypeDefinition>();
     }
 
-    private List<TypeDefinition> jsonLoader(String  fileName) throws ParserException{
+    private List<TypeDefinition> jsonLoader(String fileName) throws ParserException {
         Parser parser = new JsonParser();
         return parser.getTypes(
                 this.runner.getClass().getResourceAsStream(
-                        fileName.startsWith("/")? fileName : ("/" + fileName)
+                        fileName.startsWith("/") ? fileName : ("/" + fileName)
                 )
         );
     }
 
-    private List<TypeDefinition> alfrescoLoader(String  fileName){
+    private List<TypeDefinition> alfrescoLoader(String fileName) {
         throw new NotImplementedException();
         //TODO to implement
     }
 
-    private List<TypeDefinition> nuxeoLoader(String  fileName) {
+    private List<TypeDefinition> nuxeoLoader(String fileName) {
         throw new NotImplementedException();
         //TODO to implement
     }

@@ -1,3 +1,18 @@
+/*
+ * Copyright 2017 gsdenys@gmail.com
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.github.gsdenys.runner.type.parser;
 
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
@@ -7,7 +22,11 @@ import java.io.InputStream;
 import java.util.List;
 
 /**
- * Created by gsdenys on 09/02/17.
+ * Interface to parser Document Type.
+ *
+ * @author Denys G. Santos (gsdenys@gmail.com)
+ * @version 1.0.0
+ * @since 2.0.0
  */
 public interface Parser {
 
@@ -39,16 +58,42 @@ public interface Parser {
     final String IS_REQUIRED = "isRequired";
     final String IS_OPEN_CHOICE = "isOpenChoice";
 
-
-
-
-
+    /**
+     * Get a {@link List} of {@link TypeDefinition} based on a {@link InputStream}
+     *
+     * @param is the document type {@link InputStream}
+     * @return List the {@link TypeDefinition} {@link List}
+     * @throws ParserException any errors during the parser action
+     */
     List<TypeDefinition> getTypes(InputStream is) throws ParserException;
 
+    /**
+     * Get the {@link TypeDefinition}
+     *
+     * @param obj the object to be parsed to generated the {@link TypeDefinition} object
+     * @param <E> The element to be loaded
+     * @return TypeDefinition the type definition loaded
+     * @throws ParserException any errors during the parser action
+     */
     <E> TypeDefinition loadType(E obj) throws ParserException;
 
+    /**
+     * Get a {@link List} of {@link PropertyDefinition}
+     *
+     * @param obj the object to be parsed to generated the {@link List} of {@link PropertyDefinition} object
+     * @param <E> The element to be loaded
+     * @return List the {@link List} of {@link PropertyDefinition}
+     * @throws ParserException any errors during the parser action
+     */
     <E> List<PropertyDefinition> getProperties(E obj) throws ParserException;
 
+    /**
+     * Load the {@link PropertyDefinition}
+     *
+     * @param obj the object to be parsed to generated the {@link PropertyDefinition} object
+     * @param <E> The element to be loaded
+     * @return PropertyDefinition the {@link PropertyDefinition} object
+     * @throws ParserException any errors during the parser action
+     */
     <E> PropertyDefinition loadProperty(E obj) throws ParserException;
-
 }

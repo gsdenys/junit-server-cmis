@@ -27,7 +27,7 @@ import java.lang.annotation.Target;
  * present, the server will select an unused port.
  *
  * @author Denys G. Santos (gsdenys@gmail.com)
- * @version 1.2.0
+ * @version 1.3.1
  * @since 1.2.0
  */
 @Retention(RetentionPolicy.RUNTIME)
