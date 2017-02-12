@@ -40,9 +40,8 @@ public class CmisInMemoryRunnerTest {
     @Test
     public void getCmisURI() throws Exception {
         URI uriBase = CmisInMemoryRunner.getCmisURI();
-        URI uriCompare = new URI("http://127.0.1.1:" + CmisInMemoryRunner.getCmisPort() + "/cmis/atom11");
 
-        Assert.assertEquals("Both URLs must be equals", uriBase, uriCompare);
+        Assert.assertTrue("The URL should ends with ':8080/cmis/atom11'", uriBase.toString().endsWith(":8080/cmis/atom11"));
     }
 
     @Test
