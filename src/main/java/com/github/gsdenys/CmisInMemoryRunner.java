@@ -21,6 +21,8 @@ import com.github.gsdenys.runner.base.DocumentTypeLoader;
 import com.github.gsdenys.runner.base.PortDefinition;
 import com.github.gsdenys.runner.type.creator.TypeCreator;
 import com.github.gsdenys.runner.type.parser.ParserException;
+import com.github.gsdenys.runner.utils.CmisUtils;
+import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.definitions.TypeDefinition;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
@@ -125,6 +127,26 @@ public class CmisInMemoryRunner extends BlockJUnit4ClassRunner {
         }
 
         return URI.create(server.getURI().toString().concat(versionDefinition.getCmisPath()));
+    }
+
+    /**
+     * get the CMIS session from default repoistory (A1)
+     *
+     * @return Session the CMIS {@link Session}
+     */
+    public static Session getSession() {
+        return CmisInMemoryRunner.getSession(null);
+    }
+
+    /**
+     * Get the cmis Session from repository passed by parameter
+     *
+     * @param repositoryId the CMIS repository id
+     * @return Session the CMIS {@link Session}
+     */
+    public static Session getSession(String repositoryId) {
+        CmisUtils cmisUtils = new CmisUtils();
+        return cmisUtils.getSession(repositoryId);
     }
 
     /**

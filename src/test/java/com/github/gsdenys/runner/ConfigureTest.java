@@ -17,6 +17,7 @@ package com.github.gsdenys.runner;
 
 import com.github.gsdenys.CmisInMemoryRunner;
 import com.github.gsdenys.runner.type.creator.TypeCreator;
+import com.github.gsdenys.runner.utils.CmisUtils;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.enums.CmisVersion;
@@ -67,9 +68,7 @@ public class ConfigureTest {
 
     @Test
     public void checkDocumentType() throws Exception {
-        TypeCreator creator = new TypeCreator();
-
-        Session session = creator.getSession();
+        Session session = CmisInMemoryRunner.getSession();
 
         ObjectType objType = session.getTypeDefinition("tst:doc");
 

@@ -16,6 +16,8 @@
 package com.github.gsdenys;
 
 import com.github.gsdenys.runner.Configure;
+import org.apache.chemistry.opencmis.client.api.Session;
+import org.apache.chemistry.opencmis.commons.data.RepositoryInfo;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,6 +38,21 @@ import java.net.URL;
 @RunWith(CmisInMemoryRunner.class)
 @Configure(port = 8080)
 public class CmisInMemoryRunnerTest {
+    @Test
+    public void getSession() throws Exception {
+        Session session = CmisInMemoryRunner.getSession();
+
+       RepositoryInfo info = session.getRepositoryInfo();
+       Assert.assertNotNull("the info should not be null", info);
+    }
+
+    @Test
+    public void getSession1() throws Exception {
+        Session session = CmisInMemoryRunner.getSession("A1");
+
+        RepositoryInfo info = session.getRepositoryInfo();
+        Assert.assertNotNull("the info should not be null", info);
+    }
 
     @Test
     public void getCmisURI() throws Exception {

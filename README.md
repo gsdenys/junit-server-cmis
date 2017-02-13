@@ -63,8 +63,13 @@ public class UsageTest {
     }
 }
 ```
-Once running the Junit Test Case will starts a Jetty server with a deployed CMIS InMemory Server at __localhost__ using a random port that can be discovery using the __CmisInMemoryRunner.CMIS_PORT__ static variable.
+Once running the Junit Test Case will starts a Jetty server with a deployed CMIS InMemory Server at __localhost__ using a random port that can be discovery using the __CmisInMemoryRunner.getCmisPort()__ static method.
 
+You also can use the follow static methods to help realize your tests:
+
+  * __CmisInMemoryRunner.getCmisURI()__ that returns the CMIS _URI_.
+  * __CmisInMemoryRunner.getSession()__ that returns the CMIS session for default repository.
+  * __CmisInMemoryRunner.getSession(String repositoryId)__ that returns the CMIS Session for a repository id passed by parameter.
 
 Optionally, you can define the port that the server will be initiated using the annotation __@Configure__ (Version 1.1.1 or later). An use example of this annotation can be seen below.
 

@@ -2,6 +2,7 @@ package com.github.gsdenys.runner.type.creator;
 
 
 import com.github.gsdenys.CmisInMemoryRunner;
+import com.github.gsdenys.runner.utils.CmisUtils;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.client.api.SessionFactory;
 import org.apache.chemistry.opencmis.client.runtime.SessionFactoryImpl;
@@ -18,25 +19,7 @@ import java.util.Map;
  */
 public class TypeCreator {
 
-    /**
-     * Get CMIS {@link Session}
-     *
-     * @return Session cmis session
-     */
-    public Session getSession() {
-        URI uri = CmisInMemoryRunner.getCmisURI();
-
-        Map<String, String> parameter = new HashMap<>();
-        parameter.put(SessionParameter.USER, "test");
-        parameter.put(SessionParameter.PASSWORD, "test");
-        parameter.put(SessionParameter.ATOMPUB_URL, uri.toString());
-        parameter.put(SessionParameter.BINDING_TYPE, BindingType.ATOMPUB.value());
-        parameter.put(SessionParameter.REPOSITORY_ID, "A1");
-        //parameter.put(SessionParameter.FORCE_CMIS_VERSION, CmisVersion.CMIS_1_1.value());
-
-        SessionFactory factory = SessionFactoryImpl.newInstance();
-        return factory.createSession(parameter);
-    }
+    private CmisUtils cmisUtils;
 
     /**
      * Create a new document type
@@ -44,7 +27,9 @@ public class TypeCreator {
      * @param typeDefinition the type definition
      */
     public void execute(TypeDefinition typeDefinition) {
-        Session session = this.getSession();
+        this.cmisUtils = new CmisUtils();
+
+        Session session = this.cmisUtils.getSession(null);
         session.createType(typeDefinition);
     }
 
