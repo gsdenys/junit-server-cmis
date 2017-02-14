@@ -1,6 +1,7 @@
 package com.github.gsdenys.runner.type.creator;
 
 import com.github.gsdenys.CmisInMemoryRunner;
+import com.github.gsdenys.runner.utils.CmisUtils;
 import org.apache.chemistry.opencmis.client.api.ObjectType;
 import org.apache.chemistry.opencmis.client.api.Session;
 import org.apache.chemistry.opencmis.commons.definitions.PropertyDefinition;
@@ -60,8 +61,8 @@ public class CreateNewTypeTest {
         this.createNewType.execute(docDef);
 
         //assert
-        TypeCreator creator = new TypeCreator();
-        Session session = creator.getSession();
+        CmisUtils util = new CmisUtils();
+        Session session = util.getSession(null);
 
         ObjectType objType = session.getTypeDefinition("tst:doctype");
 
