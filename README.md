@@ -94,4 +94,4 @@ public class UsageTest {
 }
 ```
 
-For now, the unic way to add a document type at __Junit Runner for CMIS__ is using JSON descriptor. Future more will be possible to use [Alfresco](http://alfresco.com) and [Nuxeo](http://nuxeo.com) definitions model definition.
+For now, the unic way to add a document type at __Junit Runner for CMIS__ is using JSON descriptor. Future more will be possible to use [Alfresco](http://alfresco.com) and [Nuxeo](http://nuxeo.com) model definition.
