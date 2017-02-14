@@ -63,19 +63,29 @@ public class UsageTest {
     }
 }
 ```
-Once running the Junit Test Case will starts a Jetty server with a deployed CMIS InMemory Server at __localhost__ using a random port that can be discovery using the __CmisInMemoryRunner.getCmisPort()__ static method.
+Once running the Junit Test Case will starts a Jetty server with a deployed CMIS InMemory Server at __localhost__ you can make use of a set of static method that can help diring the test development. Follow you can see all of them:
 
-You also can use the follow static methods to help realize your tests:
+  * __CmisInMemoryRunner.getCmisURI()__: returns the CMIS server URI.
+  * __CmisInMemoryRunner.getCmisPort()__: returns the CMIS server port
+  * __CmisInMemoryRunner.getSession()__: returns the CMIS Session for default repository (_A1_).
+  * __CmisInMemoryRunner.getSession(String repositoryId)__: returns the CMIS Session for a repository id passed by parameter. In case of _repositoryId_ was null this method call __CmisInMemoryRunner.getSession()__.
 
-  * __CmisInMemoryRunner.getCmisURI()__ that returns the CMIS _URI_.
-  * __CmisInMemoryRunner.getSession()__ that returns the CMIS session for default repository.
-  * __CmisInMemoryRunner.getSession(String repositoryId)__ that returns the CMIS Session for a repository id passed by parameter.
+Optionally, you also can define the port that the server will be initiated, the version of CMIS and the Document type that will be used during your tests. To meke these configuration you needs to use the __@Configure__ annotation, that was introduced in 1.1.1 version and upgraded at 2.0.0 version. 
 
-Optionally, you can define the port that the server will be initiated using the annotation __@Configure__ (Version 1.1.1 or later). An use example of this annotation can be seen below.
+Follow you hava a simple example of how to user the __@Configure__ annotation.
 
 ```java
 @RunWith(CmisInMemoryRunner.class)
-@Configure(port = 9090)
+@Configure(
+    port = 9090,
+    cmisVersion = CmisVersion.CMIS_1_1,
+    docTypes = {
+        @TypeDescriptor(
+            file = "cmis-type.json",
+            loader = TypeLoader.JSON
+        )
+    }
+)
 public class UsageTest {
     @Test
     public void someTest() throws Exception {
@@ -83,3 +93,5 @@ public class UsageTest {
     }
 }
 ```
+
+For now, the unic way to add a document type at __Junit Runner for CMIS__ is using JSON descriptor. Future more will be possible to use [Alfresco](http://alfresco.com) and [Nuxeo](http://nuxeo.com) definitions model definition.
